@@ -1,0 +1,8 @@
+{
+  "name": "WerwolfGame",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "11c67666"
+}
