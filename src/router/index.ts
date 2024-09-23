@@ -6,11 +6,12 @@ import LobbyOptions from '@/views/LobbyOptions.vue';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/titleScreen',
+    name: 'titleScreen',
     component: TitleScreen
   },
   {
     path: '/lobbyoptions',
-    name: 'LobbyOptions',
+    name: 'Lobbyoptions',
     component: LobbyOptions
   },
   {
