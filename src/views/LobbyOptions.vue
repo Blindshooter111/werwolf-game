@@ -7,7 +7,11 @@
       </ion-header>
 
       <ion-content>
-
+        <ion-toolbar>
+        <ion-button href="/lobby">Create Lobby</ion-button>
+        <ion-button href="/lobbyjoin">Join Lobby</ion-button>
+        <ion-button href="/">Exit Lobby</ion-button>
+      </ion-toolbar>
       </ion-content>
     </ion-page>
   </template>
