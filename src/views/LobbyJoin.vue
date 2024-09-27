@@ -9,7 +9,7 @@
     
         <ion-content>
             <ion-toolbar>
-                <ion-button href="/">Exit Lobby</ion-button>
+                <ion-button href="/lobbyoptions">Exit Lobby</ion-button>
             </ion-toolbar>
       </ion-content>
     </ion-page>

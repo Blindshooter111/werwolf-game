@@ -2,7 +2,7 @@
     <ion-page>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Info Page</ion-title>
+          <ion-title>Lobby Options</ion-title>
         </ion-toolbar>
       </ion-header>
 
