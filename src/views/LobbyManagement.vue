@@ -41,12 +41,15 @@ export default {
     };
     this.socket.onmessage = (event) => {
       const message = event.data;
-      console.log("Lobby created.", this.lobbyId);
       if (message.startsWith("LOBBY_CREATED")) {
         // Redirect the client to the /lobby route
-        console.log("Lobby created.", this.lobbyId);
         this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
-      } else {
+      }
+      else if(message.startsWith("LOBBY_JOINED")) {
+        // Redirect the client to the /lobby route
+        this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
+      }
+       else {
         this.serverMessage = message;
       }
     };
