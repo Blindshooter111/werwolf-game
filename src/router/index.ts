@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TitleScreen from '@/views/TitleScreen.vue';
-import LobbyOptions from '@/views/Lobby-Management.vue';
 import LobbyJoin from '@/views/LobbyJoin.vue';
 import Lobby from '@/views/Lobby.vue';
-import LobbyManagement from '@/views/Lobby-Management.vue';
+import LobbyManagement from '@/views/LobbyManagement.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,8 +12,8 @@ const routes: Array<RouteRecordRaw> = [
     component: TitleScreen
   },
   {
-    path: '/lobbyoptions',
-    name: 'Lobbyoptions',
+    path: '/lobbymanagement',
+    name: 'LobbyManagement',
     component: LobbyManagement
   },
   {
@@ -23,9 +22,10 @@ const routes: Array<RouteRecordRaw> = [
     component: LobbyJoin
   },
   {
-    path: '/lobby',
-    name: 'lobby',
-    component: Lobby
+    path: "/lobby:lobbyId",
+    name: "LobbyView",
+    component: Lobby,
+    props: true
   },
   {
     path: '/',

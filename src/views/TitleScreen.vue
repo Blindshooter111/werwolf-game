@@ -9,7 +9,7 @@
   
       <ion-content class="ion-padding">
         <ion-toolbar>
-        <ion-button href="/lobbyoptions" >Start</ion-button>
+        <ion-button href="/lobbymanagement" >Start</ion-button>
 
         <ion-button >Info</ion-button>
       </ion-toolbar>

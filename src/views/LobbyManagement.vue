@@ -1,17 +1,29 @@
 <template>
-  <div class="lobby-management">
-    <h1>Lobby Options</h1>
-    <div class="input-group">
-      <input v-model="lobbyId" placeholder="Lobby ID" />
-      <div class="buttons">
-        <button @click="createLobby">Lobby erstellen</button>
-        <button @click="joinLobby">Lobby beitreten</button>
-        <button @click="startGame">Spiel starten</button>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Lobby Management</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="lobby-management">
+        <h1>Lobby Management</h1>
+        <div class="input-group">
+          <input v-model="lobbyId" placeholder="Lobby ID" />
+          <div class="buttons">
+            <ion-button @click="createLobby">Lobby erstellen</ion-button>
+            <ion-button @click="joinLobby">Lobby beitreten</ion-button>
+          </div>
+        </div>
+
+        <p class="server-message">{{ serverMessage }}</p>
       </div>
-    </div>
-    <p class="server-message">{{ serverMessage }}</p>
-  </div>
+    </ion-content>
+  </ion-page>
 </template>
+<script setup>
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+</script>
 
 <script>
 export default {
@@ -28,7 +40,15 @@ export default {
       console.log("WebSocket connection opened.");
     };
     this.socket.onmessage = (event) => {
-      this.serverMessage = event.data;
+      const message = event.data;
+      console.log("Lobby created.", this.lobbyId);
+      if (message.startsWith("LOBBY_CREATED")) {
+        // Redirect the client to the /lobby route
+        console.log("Lobby created.", this.lobbyId);
+        this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
+      } else {
+        this.serverMessage = message;
+      }
     };
   },
   methods: {
@@ -45,17 +65,12 @@ export default {
       } else {
         this.serverMessage = "Lobby ID cannot be empty.";
       }
-    },
-    startGame() {
-      if (this.lobbyId) {
-        this.socket.send("START_GAME " + this.lobbyId);
-      } else {
-        this.serverMessage = "Lobby ID cannot be empty.";
-      }
     }
   }
 };
 </script>
+
+
 
 <style scoped>
 .lobby-management {
