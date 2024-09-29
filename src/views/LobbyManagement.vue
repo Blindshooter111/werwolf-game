@@ -45,7 +45,7 @@ export default {
         // Redirect the client to the /lobby route
         this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
       }
-      else if(message.startsWith("LOBBY_JOINED")) {
+      else if(message.startsWith("JOIN_LOBBY")) {
         // Redirect the client to the /lobby route
         this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
       }
