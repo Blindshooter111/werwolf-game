@@ -27,7 +27,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 
 <script>
 export default {
-  props: ["lobbyId"],
+  props: ["lobbyId", "clientId"],
   data() {
     return {
       socket: null,
@@ -36,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    // Connect to the WebSocket server for chat
+    // Verbindet den Client mit dem WebSocket-Server
     this.socket = new WebSocket("ws://localhost:8080/echo");
 
     this.socket.onopen = () => {
@@ -45,8 +45,15 @@ export default {
 
     this.socket.onmessage = (event) => {
       const message = event.data;
+      
+      // Wenn die Nachricht eine UUID ist, speichere sie
+      if (message.startsWith("UUID")) {
+        this.clientId = message.substring(5);  // UUID von der Nachricht extrahieren
+        console.log("Client received UUID: " + this.clientId);
+      }
+
+      // Verarbeite Chat-Nachrichten
       if (message.startsWith("CHAT")) {
-        // Append received chat message to the list
         this.chatMessages.push(message.substring(5));
       }
     };
@@ -58,14 +65,14 @@ export default {
   methods: {
     sendMessage() {
       if (this.chatMessage) {
-        // Send the chat message to the WebSocket server
+        // Sende die Chat-Nachricht an den WebSocket-Server
         this.socket.send("CHAT " + this.lobbyId + " " + this.chatMessage);
-        this.chatMessage = ""; // Clear the input after sending
+        this.chatMessage = "";  // Eingabefeld nach dem Senden leeren
       }
     }
   },
   beforeDestroy() {
-    // Close the WebSocket connection when the component is destroyed
+    // WebSocket-Verbindung schließen, wenn die Komponente zerstört wird
     if (this.socket) {
       this.socket.close();
     }

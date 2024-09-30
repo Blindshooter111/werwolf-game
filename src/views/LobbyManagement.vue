@@ -31,32 +31,43 @@ export default {
     return {
       socket: null,
       lobbyId: "",
-      serverMessage: ""
+      serverMessage: "",
+      clientId: "", // Hier wird die UUID gespeichert
     };
   },
   mounted() {
+    // Verbindet den Client mit dem WebSocket-Server
     this.socket = new WebSocket("ws://localhost:8080/echo");
+
     this.socket.onopen = () => {
       console.log("WebSocket connection opened.");
     };
+
     this.socket.onmessage = (event) => {
       const message = event.data;
+
+      // Wenn die Nachricht eine UUID enthält, speichere die UUID
+      if (message.startsWith("UUID")) {
+        this.clientId = message.substring(5);  // UUID von der Nachricht extrahieren
+        console.log("Client received UUID: " + this.clientId);
+      }
+
       if (message.startsWith("LOBBY_CREATED")) {
-        // Redirect the client to the /lobby route
-        this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
-      }
-      else if(message.startsWith("JOIN_LOBBY")) {
-        // Redirect the client to the /lobby route
-        this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId } });
-      }
-       else {
+        // Redirect the client to the /lobby route and pass lobbyId and clientId
+        this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId, clientId: this.clientId } });
+      } else if (message.startsWith("LOBBY_JOINED")) {
+        // Redirect the client to the /lobby route and pass lobbyId and clientId
+        this.$router.push({ name: "LobbyView", params: { lobbyId: this.lobbyId, clientId: this.clientId } });
+      } else {
         this.serverMessage = message;
       }
     };
   },
   methods: {
     createLobby() {
+      this.lobbyId = this.generateRandomId(8);
       if (this.lobbyId) {
+        // Sende die CREATE_LOBBY Nachricht an den WebSocket-Server
         this.socket.send("CREATE_LOBBY " + this.lobbyId);
       } else {
         this.serverMessage = "Lobby ID cannot be empty.";
@@ -64,13 +75,25 @@ export default {
     },
     joinLobby() {
       if (this.lobbyId) {
+        // Sende die JOIN_LOBBY Nachricht an den WebSocket-Server
         this.socket.send("JOIN_LOBBY " + this.lobbyId);
       } else {
         this.serverMessage = "Lobby ID cannot be empty.";
       }
+    },
+    generateRandomId(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
     }
   }
+
 };
+
 </script>
 
 
